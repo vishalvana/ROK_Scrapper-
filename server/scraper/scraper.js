@@ -103,11 +103,40 @@ async function scrapeWeWorkRemotely() {
   return allJobs;
 }
 
+/**
+ * Scrape Remotive's public API.
+ * API: https://remotive.io/api/remote-jobs
+ */
+async function scrapeRemotive() {
+  const url = 'https://remotive.io/api/remote-jobs';
+  try {
+    const { data } = await client.get(url);
+    const jobs = Array.isArray(data?.jobs) ? data.jobs : [];
+
+    return jobs
+      .filter((j) => j.id && j.url && j.title)
+      .map((j) => ({
+        title: j.title,
+        company: j.company_name || 'Unknown',
+        location: j.candidate_required_location || 'Remote',
+        description: (j.description || '').replace(/<[^>]+>/g, '').slice(0, 2000),
+        tags: Array.isArray(j.tags) ? j.tags : [],
+        url: j.url,
+        source: 'remotive',
+        postedAt: j.publication_date ? new Date(j.publication_date) : undefined,
+      }));
+  } catch (err) {
+    console.error('[scraper] Failed to fetch Remotive:', err.message);
+    return [];
+  }
+}
+
 // Register all source scrapers here. Each must return an array of
 // { title, company, location, description, tags, url, source, postedAt }
 const SOURCES = [
   { name: 'remoteok', run: scrapeRemoteOK },
   { name: 'weworkremotely', run: scrapeWeWorkRemotely },
+  { name: 'remotive', run: scrapeRemotive },
 ];
 
 /**
@@ -142,7 +171,7 @@ async function runScrape(JobModel) {
   return summary;
 }
 
-module.exports = { runScrape, scrapeRemoteOK, scrapeWeWorkRemotely, SOURCES };
+module.exports = { runScrape, scrapeRemoteOK, scrapeWeWorkRemotely, scrapeRemotive, SOURCES };
 
 // Allow running standalone: `npm run scrape`
 if (require.main === module) {
