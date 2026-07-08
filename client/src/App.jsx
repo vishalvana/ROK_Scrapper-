@@ -69,7 +69,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🔎 Job Scraper</h1>
+        <h1>Job Scraper</h1>
         <p className="subtitle">Live remote job listings scraped from public sources</p>
         <button className="btn-primary" onClick={handleScrape} disabled={scraping}>
           {scraping ? 'Scraping...' : 'Scrape Now'}

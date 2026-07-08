@@ -1,231 +1,62 @@
-* {
-  box-sizing: border-box;
+:root{
+  --bg: #fbfcfe;
+  --surface: #ffffff;
+  --text: #0f1720;
+  --muted: #6b7280;
+  --border: #e6e9ef;
+  --accent: #0ea5e9;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #f5f6fa;
-  color: #1f2430;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-.app {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 32px 20px 80px;
-}
+.app{max-width:980px;margin:48px auto;padding:32px}
 
-.header {
-  text-align: center;
-  margin-bottom: 24px;
-}
+.header{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.header h1{margin:0;font-size:1.5rem;font-weight:600}
+.subtitle{color:var(--muted);margin:0;font-size:0.95rem}
 
-.header h1 {
-  margin: 0 0 4px;
-  font-size: 2rem;
-}
+.btn-primary{background:transparent;border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:10px;cursor:pointer;transition:all .12s ease;font-weight:600}
+.btn-primary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
 
-.subtitle {
-  color: #666;
-  margin: 0 0 16px;
-}
+.scrape-message{margin-top:6px;color:var(--muted);font-size:0.9rem}
 
-.btn-primary {
-  background: #2c5cc5;
-  color: white;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.filters input,.filters select{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:0.95rem;color:var(--text)}
+.btn-secondary{background:transparent;border:1px solid var(--border);padding:8px 14px;border-radius:10px;cursor:pointer}
 
-.btn-primary:hover:not(:disabled) {
-  background: #24499e;
-}
+.error-banner{background:#fff5f5;color:#b3261e;padding:10px 14px;border-radius:8px;margin:10px 0;border:1px solid #fdecea}
+.status-text{color:var(--muted);text-align:center;margin-top:40px}
+.results-count{color:var(--muted);font-size:0.9rem;margin:8px 0}
 
-.btn-primary:disabled {
-  background: #9fb2dd;
-  cursor: not-allowed;
-}
+.job-list{display:flex;flex-direction:column;gap:14px}
+.job-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.job-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.job-card-header h3{margin:0;font-size:1.05rem;font-weight:600}
+.job-card-header a{color:var(--text);text-decoration:none}
+.job-card-meta{display:flex;gap:8px;color:var(--muted);font-size:0.88rem;margin:8px 0}
 
-.scrape-message {
-  margin-top: 10px;
-  color: #1a7a3c;
-  font-size: 0.9rem;
-}
+.badge{font-size:0.78rem;color:var(--muted);background:transparent;padding:2px 6px;border-radius:999px;border:1px solid transparent}
 
-.filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  justify-content: center;
-}
+.job-card-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.tag{background:transparent;color:var(--muted);padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:0.78rem}
 
-.filters input,
-.filters select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
-}
+.job-card-desc{font-size:0.95rem;color:#263238;line-height:1.45;margin:6px 0}
+.job-card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.btn-link{color:var(--accent);text-decoration:none;font-weight:600}
+.btn-delete{background:transparent;border:none;color:#ef4444;cursor:pointer}
 
-.btn-secondary {
-  background: white;
-  border: 1px solid #2c5cc5;
-  color: #2c5cc5;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+.pager{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:22px}
+.pager button{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer}
+.pager button:disabled{opacity:0.4;cursor:not-allowed}
 
-.btn-secondary:hover {
-  background: #eef2fc;
-}
-
-.error-banner {
-  background: #fdecea;
-  color: #b3261e;
-  padding: 10px 14px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.status-text {
-  text-align: center;
-  color: #666;
-  margin-top: 40px;
-}
-
-.results-count {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-
-.job-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.job-card {
-  background: white;
-  border-radius: 10px;
-  padding: 16px 18px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.job-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.job-card-header h3 {
-  margin: 0;
-  font-size: 1.05rem;
-}
-
-.job-card-header a {
-  color: #1f2430;
-  text-decoration: none;
-}
-
-.job-card-header a:hover {
-  text-decoration: underline;
-}
-
-.badge {
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #eef2fc;
-  color: #2c5cc5;
-  white-space: nowrap;
-}
-
-.badge-weworkremotely {
-  background: #fdeee0;
-  color: #b5570c;
-}
-
-.job-card-meta {
-  display: flex;
-  gap: 6px;
-  color: #666;
-  font-size: 0.85rem;
-  margin: 6px 0;
-}
-
-.job-card-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}
-
-.tag {
-  background: #f0f0f0;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  color: #444;
-}
-
-.job-card-desc {
-  font-size: 0.9rem;
-  color: #444;
-  line-height: 1.4;
-  margin: 6px 0;
-}
-
-.job-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.btn-link {
-  color: #2c5cc5;
-  font-size: 0.85rem;
-  text-decoration: none;
-}
-
-.btn-link:hover {
-  text-decoration: underline;
-}
-
-.btn-delete {
-  background: none;
-  border: none;
-  color: #b3261e;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.pager {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.pager button {
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: white;
-  cursor: pointer;
-}
-
-.pager button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+@media (max-width:640px){.app{padding:20px}.filters{justify-content:center}}
