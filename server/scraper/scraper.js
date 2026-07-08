@@ -22,13 +22,37 @@ const client = axios.create({
   headers: { 'User-Agent': USER_AGENT },
 });
 
+function sleep(ms) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
+async function requestWithRetry(url, config = {}, retries = 3, baseDelay = 500) {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await client.get(url, config);
+    } catch (err) {
+      attempt += 1;
+      const status = err.response?.status;
+      const isRetryable = !err.response || status >= 500 || status === 429 || status === 526;
+      if (!isRetryable || attempt > retries) {
+        throw err;
+      }
+      const jitter = Math.round(Math.random() * 100);
+      const delay = Math.round(baseDelay * Math.pow(2, attempt - 1) + jitter);
+      console.warn(`[scraper] Request to ${url} failed (status=${status || 'n/a'}). retry ${attempt}/${retries} in ${delay}ms: ${err.message}`);
+      await sleep(delay);
+    }
+  }
+}
+
 /**
  * Scrape RemoteOK's public JSON feed.
  * Returns normalized job objects.
  */
 async function scrapeRemoteOK() {
   const url = 'https://remoteok.com/api';
-  const { data } = await client.get(url);
+  const { data } = await requestWithRetry(url, { responseType: 'json' });
 
   // First element is metadata, not a job - skip it
   const jobs = Array.isArray(data) ? data.slice(1) : [];
@@ -63,7 +87,7 @@ async function scrapeWeWorkRemotely() {
 
   for (const feed of feeds) {
     try {
-      const { data: xml } = await client.get(feed.url);
+      const { data: xml } = await requestWithRetry(feed.url, { responseType: 'text' });
       const parsed = await parser.parseStringPromise(xml);
       const items = parsed?.rss?.channel?.item || [];
       const itemArray = Array.isArray(items) ? items : [items];
@@ -108,9 +132,9 @@ async function scrapeWeWorkRemotely() {
  * API: https://remotive.io/api/remote-jobs
  */
 async function scrapeRemotive() {
-  const url = 'https://remotive.io/api/remote-jobs';
+    const url = 'https://remotive.io/api/remote-jobs';
   try {
-    const { data } = await client.get(url);
+    const { data } = await requestWithRetry(url, { responseType: 'json' });
     const jobs = Array.isArray(data?.jobs) ? data.jobs : [];
 
     return jobs
